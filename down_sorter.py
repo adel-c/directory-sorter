@@ -1,13 +1,14 @@
 import os
-from mimetypes import MimeTypes
+import shutil
 
 type_map = {
     "video": ["mp4", "mkv", "avi"],
-    "docs": ["odg", "doc", "txt", "docx", "pdf", "csv"],
+    "audio": ["mp3"],
+    "docs": ["odg", "doc", "txt", "docx", "pdf", "csv", "json", "py","js","java"],
     "ebooks": ["epub"],
     "archive": ["zip", "7z", "tar", "gz", "tgz", "tar.gz"],
     "iso": ["iso"],
-    "images": ["img", "jpeg", "svg"]
+    "images": ["img", "jpeg", "svg", "jpg"]
 }
 
 
@@ -19,16 +20,25 @@ def list_all_files_in(directory):
 
 
 def list_all():
-    mime = MimeTypes()
     directory = os.path.join("/home/adel/Téléchargements", '')
     listdir = list_all_files_in(directory)
     create_target_dirs(directory)
 
     for f in listdir:
         extension = extract_extension(f)
-        print(f)
-        print(extension)
-        print("\t\t" + str(mime.guess_type(f)))
+        dest = find_destination_dir_for_extention(extension)
+        if (dest):
+            shutil.move(f, os.path.join(directory, dest))
+            print("move " + f + " to  " + os.path.join(directory, dest))
+        else:
+            print("file " + f + " with extension " + extension + " not mapped")
+
+
+def find_destination_dir_for_extention(extension):
+    for dest, values in type_map.items():
+        if extension in values:
+            return dest
+    return ""
 
 
 def extract_extension(f):
