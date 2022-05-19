@@ -24,11 +24,17 @@ def list_all():
     listdir = list_all_files_in(directory)
     create_target_dirs(directory)
 
-    print(listdir)
-
     for f in listdir:
+        extension = extract_extension(f)
         print(f)
+        print(extension)
         print("\t\t" + str(mime.guess_type(f)))
+
+
+def extract_extension(f):
+    extension = os.path.splitext(f)[1]
+    extension = extension.removeprefix('.')
+    return extension
 
 
 def create_target_dirs(directory):
