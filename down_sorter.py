@@ -1,6 +1,11 @@
 import os
 import shutil
+import sys
 
+download_path = "/home/adel/Téléchargements"
+if len(sys.argv) > 1:
+    print("change directory to", sys.argv[1])
+    download_path = sys.argv[1]
 type_map = {
     "video": ["mp4", "mkv", "avi"],
     "audio": ["mp3"],
@@ -20,7 +25,7 @@ def list_all_files_in(directory):
 
 
 def list_all():
-    directory = os.path.join("/home/adel/Téléchargements", '')
+    directory = os.path.join(download_path, '')
     listdir = list_all_files_in(directory)
     create_target_dirs(directory)
 
@@ -32,7 +37,7 @@ def list_all():
                 shutil.move(f, os.path.join(directory, dest))
                 print("move " + f + " to  " + os.path.join(directory, dest))
             except OSError as e:
-                print("Can't move file "+f, e)
+                print("Can't move file " + f, e)
 
         else:
             print("file " + f + " with extension " + extension + " not mapped")
@@ -59,5 +64,5 @@ def create_target_dirs(directory):
 
 
 if __name__ == '__main__':
-    print("here")
+    print("sorting", download_path)
     list_all()
