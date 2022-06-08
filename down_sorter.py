@@ -4,7 +4,7 @@ import shutil
 type_map = {
     "video": ["mp4", "mkv", "avi"],
     "audio": ["mp3"],
-    "docs": ["odg", "doc", "txt", "docx", "pdf", "csv", "json", "py","js","java"],
+    "docs": ["odg", "doc", "txt", "docx", "pdf", "csv", "json", "py", "js", "java"],
     "ebooks": ["epub"],
     "archive": ["zip", "7z", "tar", "gz", "tgz", "tar.gz"],
     "iso": ["iso"],
@@ -27,9 +27,13 @@ def list_all():
     for f in listdir:
         extension = extract_extension(f)
         dest = find_destination_dir_for_extention(extension)
-        if (dest):
-            shutil.move(f, os.path.join(directory, dest))
-            print("move " + f + " to  " + os.path.join(directory, dest))
+        if dest:
+            try:
+                shutil.move(f, os.path.join(directory, dest))
+                print("move " + f + " to  " + os.path.join(directory, dest))
+            except OSError as e:
+                print("Can't move file "+f, e)
+
         else:
             print("file " + f + " with extension " + extension + " not mapped")
 
